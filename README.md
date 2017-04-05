@@ -1,1 +1,1 @@
-# DevChronicles
+# TheDailyDev
