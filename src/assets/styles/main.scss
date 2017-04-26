@@ -1,0 +1,123 @@
+@import "materialize-src/sass/materialize";
+@import "appTransition.styles";
+@import "home.styles";
+
+.flexitem-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.subtext-title {
+    font-size: 10px !important;
+    color: map-get($grey, lighten-5);
+    letter-spacing: 2px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lobster', cursive;
+}
+
+h1 {
+    margin: 0;
+}
+
+img {
+    width: 100%;
+}
+
+p {
+    // margin: 0;
+}
+
+ul {
+    padding: 0;
+    margin: 10px 0;
+}
+
+li {
+    list-style: none;
+
+    a {
+        font-size: 10px !important;
+        font-weight: 400;
+        color: map-get($grey, lighten-5);
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 10px 20px;
+        letter-spacing: 2px;
+    }
+
+    .sliding-u-l-r-l {
+        display: inline-block;
+        position: relative;
+        padding-bottom: 3px;
+    }
+
+    .sliding-u-l-r-l:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 3px;
+        width: 0;
+        transition: width 0s ease, background 0.5s ease;
+    }
+
+    .sliding-u-l-r-l:after {
+        content: '';
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        width: 0;
+        background: map-get($gold, base);
+        transition: width 0.5s ease;
+    }
+
+    .sliding-u-l-r-l:hover:before {
+        width: 100%;
+        background: map-get($gold, base);
+        transition: width 0.5s ease;
+    }
+
+    .sliding-u-l-r-l:hover:after {
+        width: 100%;
+        background: transparent;
+        transition: all 0s ease;
+    }
+}
+// Main style
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    max-width: 1440px;
+    margin: auto;
+    background: map-get($grey, lighten-5);
+}
+// Header
+
+.nav-container--links {
+    display: flex;
+    align-items: center;
+}
+// Articles
+
+.login {
+    height: 50px;
+
+    h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        line-height: 50px;
+        text-align: center;
+    }
+}
