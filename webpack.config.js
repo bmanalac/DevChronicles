@@ -1,74 +1,81 @@
-const path = require('path');
-const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require( 'path' )
+const webpack = require( 'webpack' )
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' )
+const CleanWebpackPlugin = require( 'clean-webpack-plugin' )
 
 // resolvePath files
-const path_prod = path.resolve(__dirname, 'dist');
-
-// Plugin(s) variables
-const extractTextPlugin = new ExtractTextPlugin({filename: '[name].css', disable: false, allChunks: true});
+const path_prod = path.resolve( __dirname, 'dist' )
 
 const config = {
-    entry: './src/index.js',
-    output: {
-        path: path_prod,
-        filename: 'bundle.js'
-        // publicPath: '/dist'
-    },
-    devServer: {
-        contentBase: 'src/'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['react', 'es2015', 'stage-2']
-                        }
-                    }
-                ]
-            }, {
-                test: /\.scss$/,
-                use: extractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader', 'sass-loader']
-                })
-            }, {
-                test: /\.html$/,
-                use: ['html-loader']
-            }, {
-                test: /\.(jpg|png)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]',
-                            outputPath: 'img/',
-                            publicPath: '/'
-                        }
-                    }
-                ]
+  entry: './src/index.js',
+  output: {
+    path: path_prod,
+    filename: 'bundle.js'
+    // publicPath: '/dist'
+  },
+  devtool: 'source-maps',
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  'env', {
+                    targets: [ '> 4%', 'ie 11', 'safari >= 7' ]
+                  }
+                ],
+                'stage-2',
+                'react'
+              ]
             }
+          }
         ]
-    },
-    plugins: [
-        extractTextPlugin,
-        new OptimizeAssetsPlugin(),
-        new HtmlWebpackPlugin({template: 'src/index.html'}),
-        new CleanWebpackPlugin(['dist']),
-        new webpack.ProvidePlugin({'React': 'react'}),
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
+      }, {
+        test: /\.html$/,
+        use: [ 'html-loader' ]
+      }, {
+        test: /\.(jpg|png)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'img/',
+              publicPath: '/'
             }
-        })
+          }
+        ]
+      }
     ]
-};
+  },
+  devServer: {
+    hot: true, // this enables hot reload
+    inline: true, // use inline method for hmr
+    overlay: false, // display errors as browser-overlay
+    quiet: false,
+    // host: 'app.dev',
+    port: 8080,
+    contentBase: path.join( __dirname, 'src' ),
+    // watchContentBase: true, // HMR is not working with true
+    watchOptions: {
+      poll: false, // needed for homestead/vagrant setup, review
+    }
+  },
+  plugins: [
+    // enable HMR globaly
+    new webpack.HotModuleReplacementPlugin( ),
+    // prints readable modules to the browser
+    new webpack.NamedModulesPlugin( ),
+    new HtmlWebpackPlugin({ template: 'src/index.html' }),
+    new CleanWebpackPlugin([ 'dist' ]),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV || 'development' )
+    })
+  ]
+}
 
-module.exports = config;
+module.exports = config
